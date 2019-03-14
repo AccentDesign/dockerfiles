@@ -1,0 +1,7 @@
+-r base.txt
+
+coverage
+django-debug-toolbar
+flake8
+mock
+pyaml
