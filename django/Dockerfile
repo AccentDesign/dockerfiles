@@ -72,17 +72,6 @@ ENV         PYTHONUNBUFFERED=1 \
 ENV         DJANGO_MANAGEPY_MIGRATE=on \
             DJANGO_MANAGEPY_COLLECTSTATIC=on
 
-# uWSGI configuration:
-ENV         UWSGI_WSGI_FILE=app/wsgi.py \
-            UWSGI_HTTP=:8000 \
-            UWSGI_MASTER=1 \
-            UWSGI_WORKERS=2 \
-            UWSGI_THREADS=8 \
-            UWSGI_UID=1000 \
-            UWSGI_GID=2000 \
-            UWSGI_LAZY_APPS=1 \
-            UWSGI_WSGI_ENV_BEHAVIOR=holy
-
 EXPOSE      8000
 
 ENTRYPOINT  ["/docker-entrypoint.sh"]
