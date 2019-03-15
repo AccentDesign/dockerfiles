@@ -73,6 +73,7 @@ ENV         DJANGO_MANAGEPY_MIGRATE=on \
             DJANGO_MANAGEPY_COLLECTSTATIC=on
 
 EXPOSE      8000
+EXPOSE      8001
 
 ENTRYPOINT  ["/docker-entrypoint.sh"]
 

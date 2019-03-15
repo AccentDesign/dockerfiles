@@ -2,7 +2,7 @@ version: '2'
 
 services:
   nginx:
-    image: accent/nginx-proxy:latest
+    image: accent/nginx-uwsgi:latest
     volumes:
     - media-volume:/www/media
     - static-volume:/www/static
@@ -29,8 +29,6 @@ services:
     - db
     - redis
     - mail
-    ports:
-    - "8000:8000"
   db:
     image: postgres:9.6
     environment:
