@@ -1,0 +1,16 @@
+{% load i18n static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <base href="/">
+        <title>Django {% block page_title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Django example site">
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>
