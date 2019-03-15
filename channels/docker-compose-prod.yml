@@ -2,7 +2,7 @@ version: '2'
 
 services:
   nginx:
-    image: accent/nginx-uwsgi-proxy:latest
+    image: accent/nginx-proxy:latest
     volumes:
     - media-volume:/www/media
     - static-volume:/www/static
