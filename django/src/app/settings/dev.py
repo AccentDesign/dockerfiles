@@ -1,6 +1,3 @@
-from os import environ
-import sys
-
 from .base import (
     INSTALLED_APPS,
     MIDDLEWARE
