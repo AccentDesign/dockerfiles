@@ -3,9 +3,11 @@
 {% block page_title %}Chat{% endblock %}
 {% block body_class %}{% endblock %}
 {% block content %}
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
-    <input id="chat-message-input" type="text" size="100"/><br/>
-    <input id="chat-message-submit" type="button" value="Send"/>
+    <div class="container pt-1h">
+        <textarea id="chat-log" cols="100" rows="20"></textarea><br/>
+        <input id="chat-message-input" type="text" size="100"/><br/>
+        <input id="chat-message-submit" class="button" type="button" value="Send"/>
+    </div>
 {% endblock %}
 {% block extra_js %}
 <script>

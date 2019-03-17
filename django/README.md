@@ -24,3 +24,13 @@ Run python migrations manually:
 ## Ready!!
 
 The container is ready at http://localhost:8000/ and a mail server ready at http://localhost:8025/
+
+## Styles
+
+npm install:
+
+    npm install
+
+build css:
+
+    npm run watch-css
