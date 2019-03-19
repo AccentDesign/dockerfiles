@@ -28,6 +28,7 @@ COPY        requirements /requirements
 RUN         set -ex \
             && apk update \
             && apk add --no-cache --virtual .build-deps \
+                build-base \
                 gcc \
                 git \
                 libc-dev \
