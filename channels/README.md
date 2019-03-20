@@ -35,6 +35,15 @@ build css:
 
     npm run watch-css
 
+## View as live
+
+To view the site as if it were running in production mode:
+
+    docker-compose -f docker-compose-prod.yml build
+    docker-compose -f docker-compose-prod.yml up
+
+To switch back to running in dev mode you will need to build as dev dependencies will be missing.
+
 ## Remove example chat app
 
 Delete the chat folder, remove from ``INSTALLED_APPS``, remove from ``urls.py`` and ``routing.py``.
