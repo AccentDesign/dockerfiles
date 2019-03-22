@@ -1,0 +1,19 @@
+# starlette hard dependencies
+aiofiles
+jinja2
+itsdangerous
+starlette
+uvicorn
+
+# database
+alembic
+psycopg2
+sqlalchemy
+sqlalchemy-utils
+
+# api
+fastapi
+pydantic[email]
+
+# other
+pyjwt
