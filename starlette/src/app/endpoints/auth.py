@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import jwt
+from app.forms import forms, LoginSchema
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import JSONResponse, RedirectResponse
 from starlette.templating import Jinja2Templates
@@ -19,16 +20,19 @@ class Token(HTTPEndpoint):
 
     async def get(self, request):
         template = 'auth/token.html'
-        context = {'request': request}
+        form = forms.Form(LoginSchema)
+        context = {'request': request, 'form': form}
         return templates.TemplateResponse(template, context)
 
     async def post(self, request):
-        json = await request.json()
-        email = json.get('email')
-        password = json.get('password')
+        data = await request.json()
 
-        user = db_session.query(User).filter(User.email == email).first()
-        if user and user.check_password(password):
+        login, errors = LoginSchema.validate_or_error(data)
+        if errors:
+            return JSONResponse(dict(errors), status_code=400)
+
+        user = db_session.query(User).filter(User.email == login.email).first()
+        if user and user.check_password(login.password):
             payload = {
                 'user_id': user.id,
                 'exp': datetime.utcnow() + timedelta(seconds=self.JWT_EXP_DELTA_SECONDS)
@@ -40,29 +44,41 @@ class Token(HTTPEndpoint):
 
 
 class Login(HTTPEndpoint):
+    LOGIN_REDIRECT_URL = '/auth/login'
+
     async def get(self, request):
         template = 'auth/login.html'
-        context = {'request': request}
+        form = forms.Form(LoginSchema)
+        context = {'request': request, 'form': form}
         return templates.TemplateResponse(template, context)
 
     async def post(self, request):
-        form = await request.form()
-        email = form.get('email')
-        password = form.get('password')
-
-        user = db_session.query(User).filter(User.email == email).first()
-        if user and user.check_password(password):
-            request.session['user'] = user.id
-            return RedirectResponse(request.url)
-
         template = 'auth/login.html'
-        context = {'request': request}
+
+        data = await request.form()
+        login, errors = LoginSchema.validate_or_error(data)
+        if errors:
+            form = forms.Form(LoginSchema, values=data, errors=errors)
+            context = {'request': request, 'form': form}
+
+            return templates.TemplateResponse(template, context)
+
+        user = db_session.query(User).filter(User.email == login.email).first()
+        if user and user.check_password(login.password):
+            request.session['user'] = user.id
+
+            return RedirectResponse(self.LOGIN_REDIRECT_URL)
+
+        form = forms.Form(LoginSchema)
+        context = {'request': request, 'form': form}
 
         return templates.TemplateResponse(template, context)
 
 
 class Logout(HTTPEndpoint):
+    LOGOUT_REDIRECT_URL = '/auth/login'
+
     async def get(self, request):
         if 'user' in request.session:
             del request.session['user']
-        return RedirectResponse('/auth/login')
+        return RedirectResponse(self.LOGOUT_REDIRECT_URL)
