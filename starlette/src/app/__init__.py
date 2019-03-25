@@ -1,9 +1,11 @@
 from starlette.applications import Starlette
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.templating import Jinja2Templates
 
 from app import settings
+from app.auth import ModelAuthBackend
 from app.routes import routes
 
 
@@ -13,14 +15,20 @@ app = Starlette(
     routes=routes
 )
 
-# the middleware
+# middleware
 app.add_middleware(
-    SessionMiddleware,
-    secret_key=settings.SECRET_KEY
+    AuthenticationMiddleware,
+    backend=ModelAuthBackend()
 )
+
 app.add_middleware(
     GZipMiddleware,
     minimum_size=1000
+)
+
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.SECRET_KEY
 )
 
 # get our templates directory

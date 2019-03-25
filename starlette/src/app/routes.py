@@ -6,7 +6,11 @@ from . import endpoints
 
 routes = [
     Route('/', endpoint=endpoints.Homepage, methods=['GET']),
-    Route('/auth/token', endpoint=endpoints.Token, methods=['GET', 'POST'], name="token"),
+    Mount('/auth', app=Router([
+        Route('/token', endpoint=endpoints.Token, methods=['GET', 'POST'], name="token"),
+        Route('/login', endpoint=endpoints.Login, methods=['GET', 'POST'], name="login"),
+        Route('/logout', endpoint=endpoints.Logout, methods=['GET'], name="logout"),
+    ])),
     Mount('/users', app=Router([
         Route('/', endpoint=endpoints.Userlist, methods=['GET'], name="users"),
         Route('/{id:int}', endpoint=endpoints.Userdetail, methods=['GET'], name="user"),

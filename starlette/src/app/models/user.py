@@ -42,6 +42,10 @@ class User(Base):
     def __str__(self):
         return self.email
 
+    @property
+    def display_name(self):
+        return f'{self.first_name} {self.last_name}'
+
     def set_password(self, password):
         salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
         password_hash = hashlib.pbkdf2_hmac(

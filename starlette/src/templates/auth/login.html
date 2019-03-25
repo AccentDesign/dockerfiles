@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-1h">
+    <p class="strong">Login example</p>
+    <p>Login as a user</p>
+    <form method="post">
+        <input type="email" name="email" placeholder="email">
+        <input type="password" name="password" placeholder="password">
+        <button type="submit" class="button button-primary">Login</button>
+    </form>
+
+    <div class="h3">Current User</div>
+    <pre id="response">
+request.user: {{ request.user }}
+request.user.is_authenticated: {{ request.user.is_authenticated }}
+request.user.display_name: {{ request.user.display_name }}
+request.user.instance: {{ request.user.instance }}</pre>
+
+    {% if request.user.is_authenticated %}
+        <a class="button button-primary" href="{{ url_for('logout') }}">Log Out</a>
+    {% endif %}
+</div>
+{% endblock %}
+
