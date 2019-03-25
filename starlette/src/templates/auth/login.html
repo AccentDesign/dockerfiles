@@ -17,7 +17,7 @@ request.user.instance: {{ request.user.instance }}</pre>
 
     {% if request.user.is_authenticated %}
         <p>Logout to see the details for the user have been cleared</p>
-        <a class="button button-primary" href="{{ url_for('logout') }}">Log Out</a>
+        <a class="button button-primary" href="{{ url_for('auth:logout') }}">Log Out</a>
     {% endif %}
 </div>
 {% endblock %}

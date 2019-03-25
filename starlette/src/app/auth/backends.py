@@ -1,6 +1,7 @@
-from app.models import SessionLocal, User
 from starlette.authentication import BaseUser, AuthenticationBackend, AuthCredentials
 from starlette.requests import Request
+
+from app.auth.models import User
 
 
 class ModelUser(BaseUser):
@@ -12,9 +13,7 @@ class ModelUser(BaseUser):
         user_id = self.request.session.get('user')
         user = None
         if user_id:
-            db_session = SessionLocal()
-            user = db_session.query(User).get(user_id)
-            db_session.close()
+            user = self.request.state.db.query(User).get(user_id)
         return user
 
     @property

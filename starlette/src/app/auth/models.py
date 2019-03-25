@@ -6,7 +6,8 @@ from sqlalchemy import Column, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
-from .base import Base
+from app.db.base_model import Base
+
 
 user_groups = Table(
     'user_groups',
@@ -34,9 +35,9 @@ class User(Base):
         String(120)
     )
     groups = relationship(
-        "Group",
+        'Group',
         secondary=user_groups,
-        backref="users"
+        backref='users'
     )
 
     def __str__(self):
@@ -68,3 +69,16 @@ class User(Base):
         )
         password_hash = binascii.hexlify(password_hash).decode('ascii')
         return password_hash == stored_password
+
+
+class Group(Base):
+    __tablename__ = 'groups'
+
+    name = Column(
+        String(255),
+        unique=True,
+        nullable=False
+    )
+
+    def __str__(self):
+        return self.name

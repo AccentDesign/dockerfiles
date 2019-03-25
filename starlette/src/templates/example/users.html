@@ -5,7 +5,7 @@
     <p class="strong">User list</p>
     <ul>
     {% for user in users %}
-        <li><a href="{{ url_for('user', id=user.id) }}">{{ user }}</a></li>
+        <li><a href="{{ url_for('example:user', id=user.id) }}">{{ user }}</a></li>
         {% endfor %}
     </ul>
 </div>

@@ -5,33 +5,21 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.templating import Jinja2Templates
 
 from app import settings
-from app.auth import ModelAuthBackend
 from app.routes import routes
+from app.db.middleware import DatabaseMiddleware
+from app.auth.backends import ModelAuthBackend
 
 
 # the app
-app = Starlette(
-    debug=settings.DEBUG,
-    routes=routes
-)
+app = Starlette(debug=settings.DEBUG, routes=routes)
 
 # middleware
-app.add_middleware(
-    AuthenticationMiddleware,
-    backend=ModelAuthBackend()
-)
+app.add_middleware(AuthenticationMiddleware, backend=ModelAuthBackend())
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+app.add_middleware(DatabaseMiddleware)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
-app.add_middleware(
-    GZipMiddleware,
-    minimum_size=1000
-)
-
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=settings.SECRET_KEY
-)
-
-# get our templates directory
+# exception handlers
 templates = Jinja2Templates(directory='templates')
 
 
@@ -39,11 +27,11 @@ templates = Jinja2Templates(directory='templates')
 async def not_found(request, exc):
     template = '404.html'
     context = {'request': request}
-    return templates.TemplateResponse(template, context, status_code=404)
+    return templates.TemplateResponse(template, context, status_code=exc.status_code)
 
 
 @app.exception_handler(500)
 async def server_error(request, exc):
     template = '500.html'
     context = {'request': request}
-    return templates.TemplateResponse(template, context, status_code=500)
+    return templates.TemplateResponse(template, context, status_code=exc.status_code)

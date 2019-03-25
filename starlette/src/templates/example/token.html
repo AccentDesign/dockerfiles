@@ -32,7 +32,7 @@
             document.getElementById('response').innerHTML = event.srcElement.response;
         });
 
-        XHR.open('POST', '/auth/token');
+        XHR.open('POST', '{{ url_for('example:token') }}');
         XHR.setRequestHeader('Content-Type', 'application/json');
         XHR.send(JSON.stringify(data));
     });

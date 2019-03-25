@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
 
-from app.models import User, SessionLocal
+from app.db import SessionLocal
+from app.auth.models import User
 
 
 def get_db(request: Request):

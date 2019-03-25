@@ -4,9 +4,9 @@
 <div class="container my-1h">
     <p>Random examples of using <a href="https://www.starlette.io" target="_blank">starlette.io</a></p>
     <ul>
-        <li><a href="{{ url_for('users') }}">Users</a></li>
-        <li><a href="{{ url_for('login') }}">Login</a></li>
-        <li><a href="{{ url_for('token') }}">JWT Login</a></li>
+        <li><a href="{{ url_for('example:users') }}">Users</a></li>
+        <li><a href="{{ url_for('auth:login') }}">Login</a></li>
+        <li><a href="{{ url_for('example:token') }}">JWT Login</a></li>
     </ul>
 </div>
 {% endblock %}
