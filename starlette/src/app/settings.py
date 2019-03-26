@@ -1,6 +1,7 @@
 from starlette.config import Config
 from starlette.datastructures import URL, Secret, CommaSeparatedStrings
 
+
 config = Config()
 
 

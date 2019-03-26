@@ -1,14 +1,9 @@
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import RedirectResponse
-from starlette.templating import Jinja2Templates
-from typesystem import Jinja2Forms
 
 from app.auth.models import User
 from app.auth.schemas import LoginSchema
-
-
-forms = Jinja2Forms(directory='templates')
-templates = Jinja2Templates(directory='templates')
+from app.globals import forms, templates
 
 
 class Login(HTTPEndpoint):

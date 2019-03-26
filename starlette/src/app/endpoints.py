@@ -1,8 +1,6 @@
 from starlette.endpoints import HTTPEndpoint
-from starlette.templating import Jinja2Templates
 
-
-templates = Jinja2Templates(directory='templates')
+from app.globals import templates
 
 
 class Homepage(HTTPEndpoint):

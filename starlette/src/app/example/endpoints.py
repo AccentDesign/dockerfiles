@@ -5,16 +5,11 @@ from sqlalchemy.orm import selectinload
 from starlette.endpoints import HTTPEndpoint
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
-from starlette.templating import Jinja2Templates
-from typesystem import Jinja2Forms
 
 from app import settings
 from app.auth.models import User
 from app.auth.schemas import LoginSchema
-
-
-forms = Jinja2Forms(directory='templates')
-templates = Jinja2Templates(directory='templates')
+from app.globals import forms, templates
 
 
 class Token(HTTPEndpoint):

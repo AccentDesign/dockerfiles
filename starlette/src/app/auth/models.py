@@ -6,7 +6,7 @@ from sqlalchemy import Column, String, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
-from app.db.base_model import Base
+from app.db import Base
 
 
 user_groups = Table(

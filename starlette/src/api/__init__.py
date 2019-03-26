@@ -1,14 +1,13 @@
-from typing import List, Optional
-
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel, EmailStr
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from starlette.requests import Request
 from starlette.status import HTTP_422_UNPROCESSABLE_ENTITY
+from typing import List, Optional
 
-from app.db import SessionLocal
 from app.auth.models import User
+from app.middleware import DatabaseMiddleware
 
 
 def get_db(request: Request):
@@ -37,6 +36,7 @@ def add_user(db_session: Session, user_in: UserIn):
 
 
 app = FastAPI()
+app.add_middleware(DatabaseMiddleware)
 
 
 @app.get("/users/", response_model=List[UserOut])
@@ -61,11 +61,3 @@ async def read_user(user_id: int, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="Not found")
     return user
-
-
-@app.middleware("http")
-async def db_session_middleware(request: Request, call_next):
-    request.state.db = SessionLocal()
-    response = await call_next(request)
-    request.state.db.close()
-    return response

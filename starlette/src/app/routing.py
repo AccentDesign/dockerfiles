@@ -2,8 +2,8 @@ from starlette.routing import Mount, Route, Router
 from starlette.staticfiles import StaticFiles
 
 from app.endpoints import Homepage
-from app.auth.routes import routes as auth_routes
-from app.example.routes import routes as example_routes
+from app.auth.routing import routes as auth_routes
+from app.example.routing import routes as example_routes
 
 routes = [
     Route('/', endpoint=Homepage, methods=['GET']),

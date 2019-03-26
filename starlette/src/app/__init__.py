@@ -2,16 +2,17 @@ from starlette.applications import Starlette
 from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.gzip import GZipMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.templating import Jinja2Templates
 
 from app import settings
-from app.routes import routes
-from app.db.middleware import DatabaseMiddleware
 from app.auth.backends import ModelAuthBackend
+from app.globals import templates
+from app.middleware import DatabaseMiddleware
+from app.routing import routes
 
 
 # the app
 app = Starlette(debug=settings.DEBUG, routes=routes)
+
 
 # middleware
 app.add_middleware(AuthenticationMiddleware, backend=ModelAuthBackend())
@@ -19,10 +20,8 @@ app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 app.add_middleware(DatabaseMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 
+
 # exception handlers
-templates = Jinja2Templates(directory='templates')
-
-
 @app.exception_handler(404)
 async def not_found(request, exc):
     template = '404.html'
