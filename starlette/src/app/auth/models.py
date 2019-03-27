@@ -2,7 +2,7 @@ import binascii
 import hashlib
 import os
 
-from sqlalchemy import Column, String, ForeignKey, Table
+from sqlalchemy import Column, String, ForeignKey, Table, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
@@ -34,6 +34,10 @@ class User(Base):
     last_name = Column(
         String(120)
     )
+    is_active = Column(
+        Boolean,
+        default=True
+    )
     groups = relationship(
         'Group',
         secondary=user_groups,
@@ -45,7 +49,7 @@ class User(Base):
 
     @property
     def is_authenticated(self) -> bool:
-        return True
+        return self.is_active
     
     @property
     def display_name(self) -> str:
