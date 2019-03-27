@@ -1,4 +1,5 @@
 from sqlalchemy.orm.exc import NoResultFound
+from starlette.authentication import requires
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import RedirectResponse
 
@@ -44,6 +45,7 @@ class Login(HTTPEndpoint):
 
 
 class Logout(HTTPEndpoint):
+    @requires(['authenticated'], redirect=settings.LOGOUT_REDIRECT_URL)
     async def get(self, request):
         request.session.clear()
         return RedirectResponse(request.url_for(settings.LOGOUT_REDIRECT_URL))

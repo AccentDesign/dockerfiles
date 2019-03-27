@@ -24,4 +24,6 @@ class ModelAuthBackend(AuthenticationBackend):
 
     async def authenticate(self, request):
         self.user_id = request.session.get('user')
-        return AuthCredentials(["authenticated"]), self.get_user()
+        user = self.get_user()
+        status = 'authenticated' if user.is_authenticated else 'anonymous'
+        return AuthCredentials([status]), self.get_user()
