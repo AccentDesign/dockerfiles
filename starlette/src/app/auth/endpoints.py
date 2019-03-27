@@ -1,14 +1,13 @@
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import RedirectResponse
 
+from app import settings
 from app.auth.models import User
 from app.auth.schemas import LoginSchema
 from app.globals import forms, templates
 
 
 class Login(HTTPEndpoint):
-    LOGIN_REDIRECT_URL = 'auth:login'
-
     async def get(self, request):
         template = 'auth/login.html'
         form = forms.Form(LoginSchema)
@@ -30,7 +29,7 @@ class Login(HTTPEndpoint):
         if user and user.check_password(login.password):
             request.session['user'] = user.id
 
-            return RedirectResponse(request.url_for(self.LOGIN_REDIRECT_URL))
+            return RedirectResponse(request.url_for(settings.LOGIN_REDIRECT_URL))
 
         form = forms.Form(LoginSchema)
         context = {'request': request, 'form': form}
@@ -39,9 +38,6 @@ class Login(HTTPEndpoint):
 
 
 class Logout(HTTPEndpoint):
-    LOGOUT_REDIRECT_URL = 'auth:login'
-
     async def get(self, request):
-        if 'user' in request.session:
-            del request.session['user']
-        return RedirectResponse(request.url_for(self.LOGOUT_REDIRECT_URL))
+        request.session.clear()
+        return RedirectResponse(request.url_for(settings.LOGOUT_REDIRECT_URL))
