@@ -2,40 +2,42 @@ import binascii
 import hashlib
 import os
 
-from sqlalchemy import Column, String, ForeignKey, Table, Boolean
+import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
 from app.db import Base
 
 
-user_groups = Table(
+user_groups = sa.Table(
     'user_groups',
     Base.metadata,
-    Column('user_id', ForeignKey('users.id'), primary_key=True),
-    Column('group_id', ForeignKey('groups.id'), primary_key=True)
+    sa.Column('user_id', sa.ForeignKey('users.id'), primary_key=True),
+    sa.Column('group_id', sa.ForeignKey('groups.id'), primary_key=True)
 )
 
 
 class User(Base):
     __tablename__ = 'users'
 
-    email = Column(
+    email = sa.Column(
         EmailType,
+        nullable=False,
         index=True,
         unique=True
     )
-    password = Column(
-        String(255)
+    password = sa.Column(
+        sa.String(255)
     )
-    first_name = Column(
-        String(120)
+    first_name = sa.Column(
+        sa.String(120)
     )
-    last_name = Column(
-        String(120)
+    last_name = sa.Column(
+        sa.String(120)
     )
-    is_active = Column(
-        Boolean,
+    is_active = sa.Column(
+        sa.Boolean,
+        nullable=False,
         default=True
     )
     groups = relationship(
@@ -82,8 +84,8 @@ class User(Base):
 class Group(Base):
     __tablename__ = 'groups'
 
-    name = Column(
-        String(255),
+    name = sa.Column(
+        sa.String(255),
         unique=True,
         nullable=False
     )

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, create_engine
+import sqlalchemy as sa
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declared_attr, as_declarative
 from sqlalchemy.orm import Session, Query, scoped_session, sessionmaker
@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session, Query, scoped_session, sessionmaker
 from app.settings import DATABASE_URL
 
 
-engine = create_engine(str(DATABASE_URL), convert_unicode=True)
+engine = sa.create_engine(str(DATABASE_URL), convert_unicode=True)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 
@@ -24,8 +24,8 @@ class Base:
     def __repr__(self):
         return f'<{self.__class__.__name__}, id={self.id}>'
 
-    id = Column(
-        Integer,
+    id = sa.Column(
+        sa.Integer,
         primary_key=True
     )
 
@@ -60,5 +60,5 @@ class Base:
             if not has_session:
                 session.close()
 
-    """ Returns a query object with a scoped session. MyClass.query.all() """
+    """ Returns a query object with a scoped session. eg: MyClass.query.get(1) """
     query: Query = db_session.query_property()

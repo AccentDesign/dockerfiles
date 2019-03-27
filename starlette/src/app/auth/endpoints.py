@@ -1,3 +1,4 @@
+from sqlalchemy.orm.exc import NoResultFound
 from starlette.endpoints import HTTPEndpoint
 from starlette.responses import RedirectResponse
 
@@ -19,17 +20,22 @@ class Login(HTTPEndpoint):
 
         data = await request.form()
         login, errors = LoginSchema.validate_or_error(data)
+
         if errors:
             form = forms.Form(LoginSchema, values=data, errors=errors)
             context = {'request': request, 'form': form}
-
             return templates.TemplateResponse(template, context)
 
-        user = request.state.db.query(User).filter(User.email == login.email).first()
-        if user and user.check_password(login.password):
-            request.session['user'] = user.id
+        try:
+            user = User.query.filter(User.email == login.email.lower()).one()
+            if user.check_password(login.password):
+                request.session['user'] = user.id
+                return RedirectResponse(request.url_for(settings.LOGIN_REDIRECT_URL))
 
-            return RedirectResponse(request.url_for(settings.LOGIN_REDIRECT_URL))
+        except NoResultFound:
+            pass
+
+        request.session.clear()
 
         form = forms.Form(LoginSchema)
         context = {'request': request, 'form': form}

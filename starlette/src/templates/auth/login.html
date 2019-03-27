@@ -9,14 +9,9 @@
         <button type="submit" class="button button-primary">Login</button>
     </form>
 
-    <pre id="response">
-request.user: {{ request.user }}
-request.user.is_authenticated: {{ request.user.is_authenticated }}
-request.user.display_name: {{ request.user.display_name }}</pre>
-
     {% if request.user.is_authenticated %}
-        <p>Logout to see the details for the user have been cleared</p>
-        <a class="button button-primary" href="{{ url_for('auth:logout') }}">Log Out</a>
+    <pre id="response">request.user.is_authenticated: {{ request.user.is_authenticated }}, request.user.display_name: {{ request.user.display_name }}</pre>
+    <a class="button button-primary" href="{{ url_for('auth:logout') }}">Log Out</a>
     {% endif %}
 </div>
 {% endblock %}

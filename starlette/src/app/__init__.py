@@ -13,12 +13,11 @@ from app.routing import routes
 # the app
 app = Starlette(debug=settings.DEBUG, routes=routes)
 
-
 # middleware
 app.add_middleware(AuthenticationMiddleware, backend=ModelAuthBackend())
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
-app.add_middleware(DatabaseMiddleware)
-app.add_middleware(GZipMiddleware, minimum_size=1000)
+app.add_middleware(GZipMiddleware)
+# app.add_middleware(DatabaseMiddleware)
 
 
 # exception handlers
