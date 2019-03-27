@@ -12,8 +12,7 @@
     <pre id="response">
 request.user: {{ request.user }}
 request.user.is_authenticated: {{ request.user.is_authenticated }}
-request.user.display_name: {{ request.user.display_name }}
-request.user.instance: {{ request.user.instance }}</pre>
+request.user.display_name: {{ request.user.display_name }}</pre>
 
     {% if request.user.is_authenticated %}
         <p>Logout to see the details for the user have been cleared</p>

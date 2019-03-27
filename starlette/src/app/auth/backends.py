@@ -1,40 +1,27 @@
 from starlette.authentication import BaseUser, AuthenticationBackend, AuthCredentials
-from starlette.requests import Request
 
 from app.auth.models import User
 
 
-class ModelUser(BaseUser):
-
-    def __init__(self, request: Request) -> None:
-        self.request = request
-
-    def _get_user(self):
-        user_id = self.request.session.get('user')
-        user = None
-        if user_id:
-            user = self.request.state.db.query(User).get(user_id)
-        return user
-
-    @property
-    def instance(self):
-        if hasattr(self, '_instance'):
-            return getattr(self, '_instance')
-
-        user = self._get_user()
-        setattr(self, '_instance', user)
-
-        return getattr(self, '_instance', None)
-
+class AnonymousUser(BaseUser):
     @property
     def is_authenticated(self) -> bool:
-        return self.instance is not None
+        return False
 
     @property
     def display_name(self) -> str:
-        return getattr(self.instance, 'display_name', '')
+        return ''
 
 
 class ModelAuthBackend(AuthenticationBackend):
+    user_id = None
+
+    def get_user(self):
+        if self.user_id:
+            return User.query.get(self.user_id)
+        else:
+            return AnonymousUser()
+
     async def authenticate(self, request):
-        return AuthCredentials(["authenticated"]), ModelUser(request)
+        self.user_id = request.session.get('user')
+        return AuthCredentials(["authenticated"]), self.get_user()
