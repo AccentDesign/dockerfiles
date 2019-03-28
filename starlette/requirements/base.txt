@@ -12,10 +12,6 @@ psycopg2
 sqlalchemy
 sqlalchemy-utils
 
-# api
-fastapi
-pydantic[email]
-
 # other
 pyjwt
 typesystem

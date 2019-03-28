@@ -10,7 +10,6 @@ Up the container, this will also run migrations for you:
 
     docker-compose up
 
-
 Run python migrations manually:
 
     docker-compose exec app sh
@@ -20,12 +19,16 @@ Create a new migration:
 
     docker-compose exec app sh
     alembic revision --autogenerate -m "first revision"
-
     
 ## Ready!!
 
 The container is ready at http://localhost:8000/ and a mail server ready at http://localhost:8025/
 
+## Testing
+
+    docker-compose exec app sh
+    pytest --cov=app --cov-report html
+    
 ## Styles
 
 npm install:

@@ -4,9 +4,9 @@ from starlette.endpoints import HTTPEndpoint
 from starlette.responses import RedirectResponse
 
 from app import settings
-from app.auth.models import User
-from app.auth.schemas import LoginSchema
 from app.globals import forms, templates
+from .models import User
+from .schemas import LoginSchema
 
 
 class Login(HTTPEndpoint):

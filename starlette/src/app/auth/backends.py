@@ -1,29 +1,18 @@
-from starlette.authentication import BaseUser, AuthenticationBackend, AuthCredentials
+from starlette.authentication import AuthenticationBackend, AuthCredentials, UnauthenticatedUser
+from starlette.requests import HTTPConnection
 
-from app.auth.models import User
-
-
-class AnonymousUser(BaseUser):
-    @property
-    def is_authenticated(self) -> bool:
-        return False
-
-    @property
-    def display_name(self) -> str:
-        return ''
+from .models import User
 
 
 class ModelAuthBackend(AuthenticationBackend):
-    user_id = None
 
-    def get_user(self):
-        if self.user_id:
-            return User.query.get(self.user_id)
-        else:
-            return AnonymousUser()
+    def get_user(self, conn: HTTPConnection):
+        user_id = conn.session.get('user')
+        if user_id:
+            return User.query.get(user_id)
 
-    async def authenticate(self, request):
-        self.user_id = request.session.get('user')
-        user = self.get_user()
-        status = 'authenticated' if user.is_authenticated else 'anonymous'
-        return AuthCredentials([status]), self.get_user()
+    async def authenticate(self, conn: HTTPConnection):
+        user = self.get_user(conn)
+        if user and user.is_authenticated:
+            return AuthCredentials(['authenticated']), user
+        return AuthCredentials(['unauthenticated']), UnauthenticatedUser()
