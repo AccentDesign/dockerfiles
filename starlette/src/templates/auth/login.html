@@ -2,16 +2,17 @@
 
 {% block content %}
 <div class="container my-1h">
-    <p class="strong">Login example</p>
-    <p>Login as a user to re render the page and see the logged in users details</p>
-    <form method="post" novalidate>
-        {{ form }}
-        <button type="submit" class="button button-primary">Login</button>
-    </form>
-
-    {% if request.user.is_authenticated %}
-    <pre id="response">request.user.is_authenticated: {{ request.user.is_authenticated }}, request.user.display_name: {{ request.user.display_name }}</pre>
-    <a class="button button-primary" href="{{ url_for('auth:logout') }}">Log Out</a>
+    <p class="strong">Login</p>
+    {% if not request.user.is_authenticated %}
+        <p>Pleas login to get started</p>
+        <form method="post" novalidate>
+            {{ form }}
+            <button type="submit" class="button button-primary">Login</button>
+        </form>
+    {% else %}
+        <p>You've logged in {{ request.user.display_name }}, thanks.</p>
+        <a class="button button-primary button-outline" href="{{ url_for('auth:logout') }}">Log Out</a>
+        <a class="button button-primary" href="{{ url_for('auth:change_password') }}">Change Password</a>
     {% endif %}
 </div>
 {% endblock %}

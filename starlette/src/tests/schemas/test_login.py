@@ -29,7 +29,3 @@ def test_invalid():
     data = {'password': 'pass'}
     _, errors = LoginSchema.validate_or_error(data)
     assert dict(errors)['password'] == 'Must have at least 8 characters.'
-
-    data = {'password': 'x' * 21}
-    _, errors = LoginSchema.validate_or_error(data)
-    assert dict(errors)['password'] == 'Must have no more than 20 characters.'
