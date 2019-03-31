@@ -9,6 +9,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=CommaSeparatedStrings)
 DATABASE_URL = config('DATABASE_URL', cast=URL)
 DEBUG = config('DEBUG', cast=bool, default=False)
 SECRET_KEY = config('SECRET_KEY', cast=Secret)
+SENTRY_DSN = config('SENTRY_DSN', cast=URL, default=None)
 TESTING = config('TESTING', cast=bool, default=False)
 
 # auth

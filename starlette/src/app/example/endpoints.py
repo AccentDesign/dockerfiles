@@ -13,6 +13,11 @@ from app.auth.schemas import LoginSchema
 from app.globals import forms, templates
 
 
+class ForceError(HTTPEndpoint):
+    async def get(self, request):
+        raise ValueError('holy shit')
+
+
 class Token(HTTPEndpoint):
     JWT_SECRET = str(settings.SECRET_KEY)
     JWT_ALGORITHM = 'HS256'

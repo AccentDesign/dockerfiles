@@ -31,8 +31,17 @@ app.mount(path='/static', app=StaticFiles(directory='static'), name='static')
 app.add_middleware(AuthenticationMiddleware, backend=ModelAuthBackend())
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 app.add_middleware(GZipMiddleware)
-# app.add_middleware(DatabaseMiddleware)
 
 # exception handlers
 app.add_exception_handler(404, handlers.not_found)
 app.add_exception_handler(500, handlers.server_error)
+
+# sentry
+if settings.SENTRY_DSN:
+    try:
+        from sentry_asgi import SentryMiddleware
+        import sentry_sdk
+        sentry_sdk.init(str(settings.SENTRY_DSN))
+        app = SentryMiddleware(app)
+    except ImportError:
+        pass
