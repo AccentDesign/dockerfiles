@@ -1,14 +1,16 @@
+import uuid
 from datetime import datetime, timedelta
 
 import jwt
+from sqlalchemy.exc import DatabaseError
 from sqlalchemy.orm import selectinload
 from sqlalchemy.orm.exc import NoResultFound
 from starlette.endpoints import HTTPEndpoint
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
-from app import settings
-from app.auth.models import User
+from app import db, settings
+from app.auth.models import User, Group
 from app.auth.schemas import LoginSchema
 from app.globals import forms, templates
 
@@ -16,6 +18,22 @@ from app.globals import forms, templates
 class ForceError(HTTPEndpoint):
     async def get(self, request):
         raise ValueError('holy shit')
+
+
+class UsingDBTest(HTTPEndpoint):
+    async def get(self, request):
+        session = db.database.session
+
+        try:
+            group = Group(name=str(uuid.uuid4()))
+            session.add(group)
+            session.commit()
+        except DatabaseError:
+            session.rollback()
+
+            return JSONResponse({'error': 'could not save'})
+
+        return JSONResponse({'id': group.id, 'name': group.name})
 
 
 class Token(HTTPEndpoint):

@@ -6,7 +6,10 @@
     <ul>
         <li><a href="{{ url_for('example:users') }}">Users</a></li>
         <li><a href="{{ url_for('auth:login') }}">Login</a></li>
-        <li><a href="{{ url_for('example:token') }}">JWT Login</a></li>
+        <li><a href="{{ url_for('example:token') }}">JWT login</a></li>
+        <li><a href="{{ url_for('example:using_db') }}">Saving to database</a></li>
+        <li><a href="/some-crap-url-we-dont-know-about">Raise a 404 error</a></li>
+        <li><a href="{{ url_for('example:error') }}">Raise a 500 error</a></li>
     </ul>
 </div>
 {% endblock %}

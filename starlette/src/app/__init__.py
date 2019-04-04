@@ -5,11 +5,10 @@ from starlette.middleware.sessions import SessionMiddleware
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
-from app import endpoints, handlers, settings
+from app import db, endpoints, handlers, settings
 from app.auth import app as auth_app
 from app.auth.backends import ModelAuthBackend
 from app.example import app as example_app
-from app.middleware import DatabaseMiddleware
 
 
 # base app

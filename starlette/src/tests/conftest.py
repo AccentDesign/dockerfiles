@@ -1,9 +1,11 @@
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy_utils import create_database, drop_database
+from sqlalchemy_utils import create_database, database_exists, drop_database
 from starlette.config import environ
 
+
 environ['TESTING'] = 'TRUE'
+
 
 from app import db, settings
 
@@ -11,6 +13,9 @@ from app import db, settings
 @pytest.fixture(scope="session")
 def engine(request):
     url = str(settings.DATABASE_URL)
+
+    if database_exists(url):
+        drop_database(url)
 
     engine = create_engine(url)
     create_database(url)
@@ -22,11 +27,18 @@ def engine(request):
 
     return engine
 
-@pytest.fixture(autouse=True, scope="module")
-def create_tables(request, engine):
-    db.Base.metadata.create_all(engine)
 
-    def fin():
-        db.Base.metadata.drop_all(engine)
+@pytest.yield_fixture(scope="session")
+def tables(engine):
+    db.database.create_all()
+    yield
+    db.database.drop_all()
 
-    request.addfinalizer(fin)
+
+@pytest.yield_fixture(autouse="true", scope="function")
+def db_session(tables):
+    session = db.database.session
+
+    yield session
+
+    session.remove()

@@ -6,19 +6,18 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 
-from app.db import Base
-
+from app.db import database
 
 user_groups = sa.Table(
     'user_groups',
-    Base.metadata,
-    sa.Column('user_id', sa.ForeignKey('users.id'), primary_key=True),
-    sa.Column('group_id', sa.ForeignKey('groups.id'), primary_key=True)
+    database.Model.metadata,
+    sa.Column('user_id', sa.ForeignKey('user.id'), primary_key=True),
+    sa.Column('group_id', sa.ForeignKey('group.id'), primary_key=True)
 )
 
 
-class User(Base):
-    __tablename__ = 'users'
+class User(database.Model):
+    __tablename__ = 'user'
 
     email = sa.Column(
         EmailType,
@@ -81,8 +80,8 @@ class User(Base):
         return password_hash == stored_password
 
 
-class Group(Base):
-    __tablename__ = 'groups'
+class Group(database.Model):
+    __tablename__ = 'group'
 
     name = sa.Column(
         sa.String(255),

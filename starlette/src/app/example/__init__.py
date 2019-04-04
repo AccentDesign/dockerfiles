@@ -10,4 +10,5 @@ app = Router([
         Route('/', endpoint=endpoints.UserList, methods=['GET'], name="users"),
         Route('/{id:int}', endpoint=endpoints.UserDetail, methods=['GET'], name="user"),
     ])),
+    Route('/using-db', endpoint=endpoints.UsingDBTest, methods=['GET'], name="using_db")
 ])
