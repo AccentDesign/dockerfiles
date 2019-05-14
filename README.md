@@ -14,3 +14,9 @@ If a ``/ws/`` path is tried it proxies off to ``app:8001`` using proxy_pass.
 Uses proxy_pass and expects a uwsgi http protocol to be running on ``app:8000``.
 
     docker build -t accent/nginx-proxy:latest nginx-proxy/
+
+## accent/nginx-proxy-all
+
+Uses proxy_pass and expects a uwsgi http protocol to be running on ``app:8000``.
+
+    docker build -t accent/nginx-proxy-all:latest nginx-proxy-all/
